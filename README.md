@@ -1,2 +1,2 @@
 # docker-android
-Docker street
+Contains docker machines and compositions in ordert to continously deliver applications to play store.
