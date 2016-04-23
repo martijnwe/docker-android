@@ -1,0 +1,26 @@
+FROM martijnwe/base:latest
+
+ENV PATH="/android-sdk-linux/build-tools/23.0.1:/android-sdk-linux/tools:/android-sdk-linux/platform-tools/bin:$PATH"
+ENV ANDROID_HOME=/android-sdk-linux
+
+RUN apt-get update
+RUN wget http://dl.google.com/android/android-sdk_r24.2-linux.tgz
+
+RUN tar -xvf android-sdk_r24.2-linux.tgz
+RUN /android-sdk-linux/tools/android list sdk -a
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 1
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 2
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 4
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 25
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 26
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 27
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 28
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 29
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 47
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 114
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 158
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 159
+RUN (while [ 1 ]; do sleep 5; echo y; done) | /android-sdk-linux/tools/android update sdk -f -u -a -t 160
+
+RUN rm -f android-sdk_r24.2-linux.tgz
+
