@@ -1,8 +1,14 @@
 FROM martijnwe/android:latest
 
+#Install Jenkins
 RUN wget -q -O - https://jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
 RUN sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
 RUN apt-get update
 RUN apt-get install -y jenkins zlib1g-dev
 
+#Install Ruby client for jenkins
 RUN gem install jenkins_api_client
+
+RUN git clone https://github.com/martijnwe/docker-android.git /develop
+
+
