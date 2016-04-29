@@ -1,0 +1,19 @@
+FROM ubuntu:14.04
+
+ADD ./share /share
+
+# Standard tooling
+RUN apt-get update
+RUN apt-get install -y unzip wget subversion git libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1 
+
+# JDK 1.7
+RUN cp /share/jdk-7u79-linux-x64.tar.gz /jdk-7u79-linux-x64.tar.gz
+RUN tar zxvf /jdk-7u79-linux-x64.tar.gz
+RUN rm -f /jdk-7u79-linux-x64.tar.gz
+
+ENV PATH="jdk1.7.0_79/bin:$PATH"
+ENV JAVA_HOME="/jdk1.7.0_79"
+
+# RUBY
+RUN apt-get install -y ruby ruby-dev ruby-bundler 
+
