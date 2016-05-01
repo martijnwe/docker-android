@@ -8,7 +8,7 @@ docker ps
 exit 256
 fi
 
-MYIMG=`docker ps | grep 5d7 | awk '{print $2}'`
+MYIMG=`docker ps | grep $1 | awk '{print $2}'`
 
 if [ -z "$MYIMG" ]; then
 echo no such image for process $1 

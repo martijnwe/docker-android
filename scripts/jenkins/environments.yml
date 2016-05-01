@@ -4,11 +4,15 @@ jenkins:
 plugins:
   - plugin: subversion
   - plugin: google-play-android-publisher
+  - plugin: envfile
 
 jobs:
   -job:
     name: Job1
     vcs_provider: subversion
     vcs_url: svn://192.168.32.4/Tuner
-    buildcmd: $WORKSPACE/gradlew assembleDebug
+    buildcmd: $WORKSPACE/gradlew assembleRelease -Dstore.path=$storepath -Dstore.pwd=$storepwd -Dkey.alias=$keyalias -Dkey.pwd=$keypwd
+    properties: /hostdir/keystore.properties
+
+
     
