@@ -1,0 +1,7 @@
+jenkins:
+  host: 'localhost'
+
+plugins:
+  - plugin: subversion
+  - plugin: google-play-android-publisher
+
