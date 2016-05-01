@@ -26,7 +26,6 @@ descriptor['jobs'].each do |jobdesc|
        @client.job.delete(job['name'])
     end
 
-
     params = {}
     params[:name] = job['name'] 
     params[:keep_dependencies] = true 
@@ -41,6 +40,7 @@ descriptor['jobs'].each do |jobdesc|
    
     if job['children']
         params[:child_projects] = job['children'] 
+        params[:child_threshold] =  'success'
     end 
 
     # Create job
@@ -61,6 +61,28 @@ descriptor['jobs'].each do |jobdesc|
         n_xml.xpath("//buildWrappers").first.add_child(envFileWrapperXml)
         @client.post_config("/job/#{path_encode job['name']}/config.xml", n_xml.to_xml)
     end
+
+
+    # Configure junit test results
+    if job['testresults'] 
+        xml = @client.job.get_config(job['name'])
+        n_xml = Nokogiri::XML(xml)
+        p_xml = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do |b_xml|
+           b_xml.send("hudson.tasks.junit.JUnitResultArchiver") {
+               b_xml.testResults job['testresults']
+               b_xml.keepLongStdio false
+               b_xml.healthScaleFactor '1.0'
+               b_xml.allowEmptyResults = false
+           }
+        end
+        junitPublisherXml = Nokogiri::XML(p_xml.to_xml).xpath(
+           "//hudson.tasks.junit.JUnitResultArchiver"
+        ).first
+        n_xml.xpath("//publishers").first.add_child(junitPublisherXml)
+        @client.post_config("/job/#{path_encode job['name']}/config.xml", n_xml.to_xml)
+    end
+
+
 end
 
 
