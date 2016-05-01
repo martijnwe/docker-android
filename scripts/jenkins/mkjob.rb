@@ -1,29 +1,33 @@
 require 'jenkins_api_client'
 require 'yaml'
 
-
-ymlCmd = ARGV[0]
+ymlEnv = ARGV[0]
+ymlEnv="./environments.yml" if ymlEnv == nil
 
 parsed = begin
-  descriptor = YAML.load(File.open(ymlCmd))
+  descriptor = YAML.load(File.open(ymlEnv))
 rescue ArgumentError => e
-  puts "Could not parse YAML: #{e.message}"
+  puts "Could not parse environment descriptor: #{e.message}"
 end
 
-puts descriptor.inspect
+puts descriptor['jenkins']['host'] 
 
-@client = JenkinsApi::Client.new(:server_ip => 'localhost',:username => 'jenkins', :password => 'jenkins')
-# The following call will return all jobs matching 'Testjob'
-puts @client.job.list_all
+@client = JenkinsApi::Client.new(
+    :server_ip =>descriptor['jenkins']['host']
+    )
+
+@client.system.wait_for_ready
 
 
-@client.job.create_freestyle(
-  :name => "Werckmeister Assemble",
-  :keep_dependencies => true,
-  :concurrent_build => true,
-  :scm_provider => "subversion",
-  :scm_url => "svn:192.168.32.4/Tuner",
-  :shell_command => "$WORKSPACE/gradlew assembleDebug"
+descriptor['jobs'].each {|k,job| 
+
+    @client.job.create_freestyle(
+      :name => job['name'],
+      :keep_dependencies => true,
+      :concurrent_build => true,
+      :scm_provider => job['vcs_provider'],
+      :scm_url => job['vcs_url'],
+      :shell_command => job['buildcmd']
 )
 
-
+}
