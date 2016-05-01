@@ -63,6 +63,24 @@ descriptor['jobs'].each do |jobdesc|
     end
 
 
+    # Configure buildversion
+    if job['version'] 
+        xml = @client.job.get_config(job['name'])
+        n_xml = Nokogiri::XML(xml)
+        p_xml = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do |b_xml|
+           b_xml.send("org.jenkinsci.plugins.buildnamesetter.BuildNameSetter") {
+               b_xml.template job['version']
+               b_xml.runAtStart true
+               b_xml.runAtEnd true
+           }
+        end
+        buildversionWrapperXml = Nokogiri::XML(p_xml.to_xml).xpath(
+           "//org.jenkinsci.plugins.buildnamesetter.BuildNameSetter"
+        ).first
+        n_xml.xpath("//buildWrappers").first.add_child(buildversionWrapperXml)
+        @client.post_config("/job/#{path_encode job['name']}/config.xml", n_xml.to_xml)
+    end
+
     # Configure junit test results
     if job['testresults'] 
         xml = @client.job.get_config(job['name'])

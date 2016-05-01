@@ -5,6 +5,7 @@ plugins:
   - plugin: subversion
   - plugin: google-play-android-publisher
   - plugin: envfile
+  - plugin: build-name-setter
 
 jobs:
   - job:
@@ -15,6 +16,7 @@ jobs:
       buildcmd: $WORKSPACE/gradlew clean assembleRelease -Dstore.path=$storepath -Dstore.pwd=$storepwd -Dkey.alias=$keyalias -Dkey.pwd=$keypwd
       properties: /hostdir/keystore.properties
       children: Test
+      version: ${XML,file="app/src/main/AndroidManifest.xml",xpath="//manifest/@versionName"}-${BUILD_NUMBER}
 
   - job:
       name: Test 
@@ -22,4 +24,5 @@ jobs:
       vcs_url: svn://192.168.32.4/Tuner
       buildcmd: $WORKSPACE/gradlew clean testRelease 
       testresults: '**/TEST-*.xml'
+      version: ${XML,file="app/src/main/AndroidManifest.xml",xpath="//manifest/@versionName"}-${BUILD_NUMBER}
     
