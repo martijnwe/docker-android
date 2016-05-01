@@ -36,7 +36,7 @@ descriptor['jobs'].each do |jobdesc|
     params[:shell_command] = job['buildcmd'] 
     
     if job['schedule']
-        params[:timer] = job['schedule'] 
+        params[:scm_trigger] = job['schedule'] 
     end
    
     if job['children']
