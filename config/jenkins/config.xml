@@ -43,7 +43,7 @@
             <comparator class="hudson.util.CaseInsensitiveComparator"/>
           </default>
           <int>2</int>
-          <string>ANDROID_HOME=</string>
+          <string>ANDROID_HOME</string>
           <string>/android-sdk-linux</string>
           <string>JAVA_HOME</string>
           <string>/jdk1.7.0_79</string>
