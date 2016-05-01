@@ -7,12 +7,18 @@ plugins:
   - plugin: envfile
 
 jobs:
-  -job:
-    name: Job3
-    vcs_provider: subversion
-    vcs_url: svn://192.168.32.4/Tuner
-    buildcmd: $WORKSPACE/gradlew assembleRelease -Dstore.path=$storepath -Dstore.pwd=$storepwd -Dkey.alias=$keyalias -Dkey.pwd=$keypwd
-    properties: /hostdir/keystore.properties
+  - job:
+      name: Build 
+      vcs_provider: subversion
+      vcs_url: svn://192.168.32.4/Tuner
+      schedule: H/5 * * * *
+      buildcmd: $WORKSPACE/gradlew assembleRelease -Dstore.path=$storepath -Dstore.pwd=$storepwd -Dkey.alias=$keyalias -Dkey.pwd=$keypwd
+      properties: /hostdir/keystore.properties
+      children: Test
 
-
+  - job:
+      name: Test 
+      vcs_provider: subversion
+      vcs_url: svn://192.168.32.4/Tuner
+      buildcmd: $WORKSPACE/gradlew testRelease 
     
