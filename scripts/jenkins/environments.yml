@@ -13,16 +13,20 @@ jobs:
       vcs_provider: subversion
       vcs_url: svn://192.168.32.4/Tuner
       schedule: H/5 * * * *
-      buildcmd: $WORKSPACE/gradlew clean assembleRelease -Dstore.path=$storepath -Dstore.pwd=$storepwd -Dkey.alias=$keyalias -Dkey.pwd=$keypwd
+      buildcmd: $WORKSPACE/gradlew clean buildRelease testRelease
       properties: /hostdir/keystore.properties
-      children: Test
+      testresults: '**/TEST-*.xml'
+      children: Deploy
       version: ${XML,file="app/src/main/AndroidManifest.xml",xpath="//manifest/@versionName"}-${BUILD_NUMBER}
 
   - job:
-      name: Test 
+      name: Deploy
       vcs_provider: subversion
       vcs_url: svn://192.168.32.4/Tuner
-      buildcmd: $WORKSPACE/gradlew clean testRelease 
-      testresults: '**/TEST-*.xml'
+      buildcmd: $WORKSPACE/gradlew clean assembleRelease -Dstore.path=$storepath -Dstore.pwd=$storepwd -Dkey.alias=$keyalias -Dkey.pwd=$keypwd
+      properties: /hostdir/keystore.properties
       version: ${XML,file="app/src/main/AndroidManifest.xml",xpath="//manifest/@versionName"}-${BUILD_NUMBER}
+      credentials: jenkins-pipeline
+      apkfiles: '**/app/build/outputs/apk/app-release.apk'
+      releasetrack: 'alpha'
     

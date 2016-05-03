@@ -100,7 +100,26 @@ descriptor['jobs'].each do |jobdesc|
         @client.post_config("/job/#{path_encode job['name']}/config.xml", n_xml.to_xml)
     end
 
-
+    # Configure Android Publisher 
+    if job['apkfiles'] 
+        xml = @client.job.get_config(job['name'])
+        n_xml = Nokogiri::XML(xml)
+        p_xml = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do |b_xml|
+           b_xml.send("org.jenkinsci.plugins.googleplayandroidpublisher.ApkPublisher") {
+               b_xml.googleCredentialsId job['credentials']
+               b_xml.apkFilesPattern job['apkfiles'] 
+               b_xml.expansionFilesPattern job['expansionfiles'] 
+               b_xml.usePreviousExpansionFilesIfMissing false
+               b_xml.trackName job['releasetrack']
+               b_xml.rolloutPercentage job['percentage']
+           }
+        end
+        apkPublisherXml = Nokogiri::XML(p_xml.to_xml).xpath(
+           "//org.jenkinsci.plugins.googleplayandroidpublisher.ApkPublisher"
+        ).first
+        n_xml.xpath("//publishers").first.add_child(apkPublisherXml)
+        @client.post_config("/job/#{path_encode job['name']}/config.xml", n_xml.to_xml)
+    end
 end
 
 
