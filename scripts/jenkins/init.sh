@@ -10,3 +10,9 @@ sleep 10
 ruby plugins.rb $1
 ruby mkjob.rb $1
 
+
+while :
+do
+    sleep 60
+done
+
