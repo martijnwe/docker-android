@@ -5,7 +5,7 @@ require 'yaml'
 include JenkinsApi::UriHelper
 
 ymlEnv = ARGV[0]
-ymlEnv="./environments.yml" if ymlEnv == nil
+ymlEnv="./default.yml" if ymlEnv == nil
 
 parsed = begin
   descriptor = YAML.load(File.open(ymlEnv))
