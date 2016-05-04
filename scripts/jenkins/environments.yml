@@ -5,6 +5,8 @@ plugins:
   - plugin: subversion
   - plugin: google-play-android-publisher
   - plugin: envfile
+  - plugin: envinject
+  - plugin: android-lint
   - plugin: build-name-setter
 
 jobs:
