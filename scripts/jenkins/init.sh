@@ -12,6 +12,7 @@ ruby /develop/scripts/jenkins/plugins.rb $1
 ruby /develop/scripts/jenkins/mkjob.rb $1
 
 
+echo jenkins started....
 while :
 do
     sleep 60
