@@ -7,8 +7,9 @@ fi
 service jenkins start
 sleep 10
 
-ruby plugins.rb $1
-ruby mkjob.rb $1
+ruby /develop/scripts/jenkins/upgrade.rb $1
+ruby /develop/scripts/jenkins/plugins.rb $1
+ruby /develop/scripts/jenkins/mkjob.rb $1
 
 
 while :
